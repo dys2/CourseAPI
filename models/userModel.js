@@ -11,6 +11,8 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  firstName: String,
+  lastName: String,
   date: {
     type: Date,
     default: Date.now()
@@ -18,6 +20,10 @@ const UserSchema = new mongoose.Schema({
   picture: {
     type: String,
     default: 'https://support.plymouth.edu/kb_images/Yammer/default.jpeg'
+  },
+  verified: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -33,7 +39,7 @@ const UserSchema = new mongoose.Schema({
 //   }
 // });
 
-UserSchema.methods.passwordIsValid = async function(password, cb) {
+UserSchema.methods.verifyPassword = async function(password, cb) {
   try {
     cb(null, await bcrypt.compare(password, this.password));
   } catch(err) {
