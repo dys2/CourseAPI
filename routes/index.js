@@ -10,5 +10,7 @@ module.exports = server => {
 	server.route('/login')
 		.post(requireLogin, userController.login);
 	server.route('/verify_user')
-		.put(requireAuth, userController.verify);
+    .put(requireAuth, userController.verify);
+  server.route('/check_auth')
+    .get(requireAuth, userController. checkAuth);
 }

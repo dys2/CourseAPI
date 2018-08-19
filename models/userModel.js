@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -13,6 +13,14 @@ const UserSchema = new mongoose.Schema({
   },
   firstName: String,
   lastName: String,
+  contentCreator: {
+    type: Boolean,
+    default: false
+  },
+  admin: {
+    type: Boolean,
+    default: false
+  },
   date: {
     type: Date,
     default: Date.now()
@@ -28,18 +36,18 @@ const UserSchema = new mongoose.Schema({
 });
 
 
-// UserSchema.pre('save', async function(next) {
-//   if (!this.isModified("password"))
-//     return next();
-//   try {
-//     this.password = await bcrypt.hash(this.password, 11);
-//     next();
-//   } catch(err) {
-//     next(err);
-//   }
-// });
+userSchema.pre('save', async function(next) {
+  if (!this.isModified("password"))
+    return next();
+  try {
+    this.password = await bcrypt.hash(this.password, 11);
+    next();
+  } catch(err) {
+    next(err);
+  }
+});
 
-UserSchema.methods.verifyPassword = async function(password, cb) {
+userSchema.methods.verifyPassword = async function(password, cb) {
   try {
     cb(null, await bcrypt.compare(password, this.password));
   } catch(err) {
@@ -48,4 +56,4 @@ UserSchema.methods.verifyPassword = async function(password, cb) {
 }
 
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', userSchema);
