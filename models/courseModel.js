@@ -16,10 +16,12 @@ const lessonSchema = new mongoose.Schema({
     ref: 'User',
   },
   position: {
-    type: Number,
-    required: true
+    type: Number
   },
-  course: mongoose.Schema.Types.ObjectId
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course'
+  }
 });
 
 const courseSchema = new mongoose.Schema({
@@ -43,7 +45,13 @@ const courseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now()
   },
-  lessons: [lessonSchema]
+  lessons: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Lesson'
+  }]
 });
 
-module.exports = mongoose.model("Course", courseSchema);
+module.exports = {
+  Course: mongoose.model("Course", courseSchema),
+  Lesson: mongoose.model("Lesson", lessonSchema)
+};
