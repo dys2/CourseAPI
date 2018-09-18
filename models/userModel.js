@@ -47,11 +47,11 @@ userSchema.pre('save', async function(next) {
   }
 });
 
-userSchema.methods.verifyPassword = async function(password, cb) {
+userSchema.methods.verifyPassword = async function(password) {
   try {
-    cb(null, await bcrypt.compare(password, this.password));
+    return await bcrypt.compare(password, this.password);
   } catch(err) {
-    cb(err);
+    throw err;
   }
 }
 

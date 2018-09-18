@@ -41,10 +41,12 @@ const logIn = new LocalStrategy(
   }
 );
 
+
 passport.use(tokenCheck);
 passport.use(logIn);
 
 module.exports = {
-  requireAuth: passport.authenticate('jwt', { session: false }),
+	checkAuth: (req, res, next) => passport.authenticate('jwt', (err, user, done) => {next()})(req, res, next),
+  requireAuth: passport.authenticate('jwt', { session: false  }),
   requireLogin: passport.authenticate('local',{ session: false })
 };

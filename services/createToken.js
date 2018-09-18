@@ -1,8 +1,9 @@
-const jwt = require('jwt-simple');
+const jsonwebtoken = require('jsonwebtoken');
 const config = require('../config');
 
 module.exports = user => 
-	jwt.encode({
-    sub: user.id,
-    iat: new Date().getTime(),
-  }, config.jwtSecret);
+  jsonwebtoken.sign(
+    { id: user.id, email: user.email },
+    config.jwtSecret,
+    { expiresIn: '1y' }
+);
